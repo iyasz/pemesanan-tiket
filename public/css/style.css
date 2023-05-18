@@ -1,0 +1,53 @@
+body {
+    background: #f7f7f7;
+    font-family: 'Poppins', sans-serif;
+}
+
+.container.auth-login {
+    padding: 140px 0;
+}
+
+.fs-s-sm {
+    font-size: 12.4px !important;
+}
+
+.fs-sm {
+    font-size: 22px;
+}
+
+.fw-300 {
+    font-weight: 300;
+}
+
+.fw-400 {
+    font-weight: 400;
+}
+
+.fw-500 {
+    font-weight: 500;
+}
+
+.fw-600 {
+    font-weight: 600;
+}
+
+.form-control:focus, .form-select:focus, .form-check-input:focus, .accordion-button:focus {
+    box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+    border-bottom: 1px solid #dee2e6;
+    background: white !important;
+}
+
+hr {
+    opacity: 13%;
+}
+  
+td, th {
+    white-space: nowrap;
+}
+
+/* .label-input {
+    font-size: ;
+} */
