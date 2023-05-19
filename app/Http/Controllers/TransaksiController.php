@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailTransaksi;
 use App\Models\Tiket;
 use App\Models\Transaksi;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransaksiController extends Controller
 {
@@ -31,7 +34,7 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -39,7 +42,9 @@ class TransaksiController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $trx = Transaksi::findOrfail($id);
+        $detail = DetailTransaksi::where('transaksi_id' , $id)->first();
+        return view('manage.transaksi.detail', compact('trx', 'detail'));
     }
 
     /**
@@ -74,7 +79,33 @@ class TransaksiController extends Controller
 
     public function getValueFromModal(Request $request)
     {
-        $tiket = Tiket::findOrFail($request->id);
+        $tiket = Tiket::findOrFail($request->input('id'));
         return $tiket;
+    }
+
+    public function insertPaymentFromTransaksi(Request $request)
+    {
+        $trx = Transaksi::create([
+            'invoice_code' => random_int(00000000, 100000000),
+            'user_id' => Auth::user()->id,
+            'payment_method' => $request->input('payment_method'),
+            'total_harga' => $request->input('total'),
+            'bayar' => $request->input('bayar'),
+            'kembali' => $request->input('kembali'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        foreach ($request->input('names') as $name) {
+            DetailTransaksi::create([
+                'transaksi_id' => $trx->id,
+                'tiket_id' => $request->input('id'),
+                'name' => $name,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+        }
+
+        return "berhasil";
     }
 }

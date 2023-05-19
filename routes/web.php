@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/transaksi', TransaksiController::class);
     Route::get('/search/tiket-pesawat', [TransaksiController::class, 'SearchTiketPesawat']);
     Route::get('/value/search/tiket-pesawat', [TransaksiController::class, 'getValueFromModal']);
+    Route::post('/pembayaran/confirm', [TransaksiController::class, 'insertPaymentFromTransaksi']);
     Route::get('/logout', [AuthController::class, 'logout']);
 
 

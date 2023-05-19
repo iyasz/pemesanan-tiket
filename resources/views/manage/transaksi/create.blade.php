@@ -8,7 +8,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Tiket Pesawat</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body" >
             <div class="input-group my-3">
@@ -40,18 +40,28 @@
                                         <div class="card-body">
                                             <div class="mb-3 d-flex">
                                                 <h5>{{Auth::user()->name}}</h5>
-                                                <button class="btn btn-primary ms-auto btn-sm fs-s-sm" id="btnAddNameTransaksi">Tambah</button>
+                                                <button class="btn btn-primary ms-auto btn-sm fs-s-sm" disabled id="btnAddNameTransaksi">Tambah</button>
                                             </div>
                                                 <hr>    
-                                                <div class="col-12 col-lg-7">
-                                                    <h4 class="fs-s-sm">Tiket Pesawat</h4>
-                                                    <input type="text" data-bs-toggle="modal" data-bs-target="#searchTiketPesawatModal" name="" class="form-control rounded-1" readonly id="searchTiketPesawat">                                                 
+                                                <div class="row">
+                                                    <div class="col-12 col-lg-7">
+                                                        <h4 class="fs-s-sm">Tiket Pesawat</h4>
+                                                        <input type="text" data-bs-toggle="modal" data-bs-target="#searchTiketPesawatModal" name="" class="form-control rounded-1 fs-s-sm" readonly id="searchTiketPesawat">                                                 
                                                 </div>
+                                                <div class="col-lg-5 col-12">
+                                                    <h4 class="fs-s-sm">Metode Pembayaran</h4>
+                                                    <select name="" id="selectPaymentMethod" class="form-select form-select-sm fs-s-sm">
+                                                        <option disabled selected>Choose An Option</option>
+                                                        <option value="1">Cash</option>
+                                                        <option value="2">Pembayaran Online</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                                 <hr>
                                             <div class="row mt-3" id="nameDetailTransaksi">
                                                 <div class="col-lg-6 col-12 mb-2">
                                                     <p class="fs-s-sm fw-300 mb-1">Nama</p>
-                                                    <input type="text" name="name" id="" class="form-control fs-s-sm">
+                                                    <input type="text" name="name[]" id="" class="form-control fs-s-sm">
                                                 </div>
                                             </div>
                                         </div>
@@ -63,35 +73,36 @@
                                             <div class="">
                                                 <h6>Payment Details</h6>
                                                 <hr>
-                                            </div>
+                                            </div>  
                                             <div class="row">
                                                 <div class="col-6 mb-2">
                                                     <h4 class="fs-s-sm">Tiket Pesawat</h4>
                                                 </div>
                                                 <div class="col-6 mb-2">
-                                                    <p class="fs-s-sm fw-300 mb-0">IDR {{number_format(0)}}</p>
+                                                    <p class="fs-s-sm fw-300 mb-0" id="priceTiketPesawat">IDR 0</p>
                                                 </div>
                                                 <div class="col-6 mb-2">
                                                     <h4 class="fs-s-sm">Total</h4>
                                                 </div>
                                                 <div class="col-6 mb-2">
-                                                    <p class="fs-s-sm fw-300 mb-0">IDR {{number_format(0)}}</p>
+                                                    <p class="fs-s-sm fw-300 mb-0 " data-total="" data-real="" id="totalAllPriceTransaksi">IDR 0</p>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="input-group mb-3">
-                                                        <input type="text" class="form-control form-control-sm" placeholder="Uang Masuk">
-                                                        <button class="btn btn-primary btn-sm" type="button"><i class="bi bi-search"></i></button>
+                                                        <input type="text" class="form-control form-control-sm" id="rupiahConvert" readonly placeholder="Uang Masuk">
+                                                        <input type="hidden" class="form-control form-control-sm" id="rupiahResultConvert" placeholder="Uang Masuk">
+                                                        <button class="btn btn-primary btn-sm" id="totalCalcButtonTransaksi" disabled type="button"><i class="bi bi-search"></i></button>
                                                       </div>
                                                     </div>
                                                     <div class="col-12">
-                                                        <button class="btn btn-primary w-100 btn-sm mb-3 fs-s-sm rounded-1">Pay Now</button>
+                                                        <button class="btn btn-primary w-100 btn-sm mb-3 fs-s-sm rounded-1" value="" disabled id="btnPayNowTransaksi">Pay Now</button>
                                                     </div>
                                                     <hr>
-                                                <div class="col-6">
+                                                <div class="col-6"> 
                                                     <h4 class="fs-s-sm mb-0">Kembali</h4>
                                                 </div>
                                                 <div class="col-6">
-                                                    <p class="fs-s-sm fw-300 mb-0">IDR {{number_format(300000)}}</p>
+                                                    <p class="fs-s-sm fw-300 mb-0" data-total="" id="kembaliTransaksiUserPayment">IDR 0</p>
                                                 </div>
                                             </div>
                                         </div>

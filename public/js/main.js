@@ -20,31 +20,89 @@ $(document).ready(function() {
   $('.form-select.start-city').select2();
 });
 
-$('#btnAddNameTransaksi').on('click', function(){
+$('#rupiahConvert').on('keydown', function(){
+  var total = $('#rupiahResultConvert').val() - parseInt($('#totalAllPriceTransaksi').attr('data-total'));
+
+  console.log(total)
+  $('#kembaliTransaksiUserPayment').empty()
+  $('#kembaliTransaksiUserPayment').text('IDR '+ parseInt(total).toLocaleString()).attr('data-total', total)
+})
+
+$('#btnPayNowTransaksi').on('click', function(){
+
+  var names = Array.from(document.getElementsByName('name[]')).map(function(element) {
+    return element.value;
+  });
+
+  var data = {
+    id: $('#btnPayNowTransaksi').val(),
+    names: names,
+    total: $('#totalAllPriceTransaksi').data('total'),
+    bayar: $('#rupiahResultConvert').val(),
+    kembali: $('#kembaliTransaksiUserPayment').data('total'),
+    payment_method: $('#selectPaymentMethod').val(),
+};
+
+axios.post("/pembayaran/confirm", data)
+    .then(function(response) {
+        console.log(response);
+        window.location.href = "/transaksi";
+    })
+    .catch(function(error) {
+        console.error(error);
+    });
+
+})
+
+$('#totalCalcButtonTransaksi').on('click', function(){
+  var totalValue = parseInt($('#rupiahResultConvert').val()) - parseInt($('#totalAllPriceTransaksi').attr('data-total')) ;
+  $('#kembaliTransaksiUserPayment').text('IDR '+ totalValue.toLocaleString())
+  $('#kembaliTransaksiUserPayment').attr('data-total', totalValue)
+  
+})
+
+$('#btnAddNameTransaksi').on('click', function() {
+
+  var calc = parseInt($('#totalAllPriceTransaksi').attr('data-total'));
+  var calcReal = parseInt($('#totalAllPriceTransaksi').attr('data-real'));
+
+  calc += calcReal;
+  $('#totalAllPriceTransaksi').attr('data-total', calc).text('IDR ' + calc.toLocaleString());
+
   var row = $('#nameDetailTransaksi');
   var content = `
   <div class="col-lg-6 col-12 mb-2">
     <p class="fs-s-sm fw-300 mb-1">Nama</p>
-    <input type="text" name="name" id="" class="form-control fs-s-sm">
+    <input type="text" name="name[]" id="" class="form-control fs-s-sm">
   </div>
   `
   row.append(content);
-})
+});
+
 
 function getValueFromModalTransaksi(id){
-  axios({
-    method: "get",
-    url: "/value/search/tiket-pesawat",
+  $.ajax({
+    type: 'get',
+    url: '/value/search/tiket-pesawat',
     data: {
-        id: id,
+      id: id,
     },
-})
-    .then(function (response) {
-      console.log(response)
-    })
-    .catch(function (error) {
-        
-    });
+    success: function(e){
+      console.log(e)
+      var price = parseFloat(e.harga)
+      var formattedPrice = price.toLocaleString()
+      $('#btnAddNameTransaksi').removeAttr('disabled'); 
+      $('#btnPayNowTransaksi').removeAttr('disabled'); 
+      $('#totalCalcButtonTransaksi').removeAttr('disabled'); 
+      $('#rupiahConvert').removeAttr('readonly'); 
+      $('#priceTiketPesawat').html('IDR '+ formattedPrice); 
+      $('#totalAllPriceTransaksi').html('IDR '+ formattedPrice); 
+      $('#totalAllPriceTransaksi').attr('data-total', e.harga); 
+      $('#totalAllPriceTransaksi').attr('data-real', e.harga); 
+      $('#searchTiketPesawat').val(e.maskapai +' - '+ 'From ' + e.start_city + ' To ' + e.city_destination);
+      $('#btnPayNowTransaksi').attr('value', e.id); 
+    }
+  })
 }
 
 
@@ -108,7 +166,7 @@ $('#btnSearchTiketPesawat').on('click', function(){
                       </div>
                       <div class="col-12 mb-2">
                         <div class="text-end">
-                          <button class="btn btn-primary btn-sm fs-s-sm" onclick="getValueFromModalTransaksi('${result.id}')">Pilih</button>
+                          <button class="btn btn-primary btn-sm fs-s-sm" data-bs-dismiss="modal" onclick="getValueFromModalTransaksi('${result.id}')">Pilih</button>
                         </div>
                       </div>
                     </div>

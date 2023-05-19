@@ -27,4 +27,9 @@ class DetailTransaksi extends Model
     {
         return false;
     }
+
+    public function tiket()
+    {
+        return $this->belongsTo(Tiket::class);
+    }
 }

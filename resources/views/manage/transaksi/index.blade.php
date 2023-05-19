@@ -27,11 +27,11 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Transaksi Code</th>
-                                        <th>Maskapai</th>
-                                        <th>From</th>
-                                        <th>Destination City</th>
-                                        <th>Jadwal</th>
+                                        <th>Admin</th>
+                                        <th>Metode Pembayaran</th>
+                                        <th>Total Harga</th>
+                                        <th>Uang Masuk</th>
+                                        <th>Kembali</th>
                                         <th>Action</th>
                                     </tr>
                             </thead>
@@ -39,18 +39,12 @@
                                 @foreach ($transaksi as $data)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$data->Transaksi_code}}</td>
-                                    <td>{{$data->maskapai}}</td>
-                                    <td>{{$data->start_city}}</td>
-                                    <td>{{$data->city_destination}}</td>
-                                    <td>{{date('d M Y : H:m ', strtotime($data->jam_penerbangan))}}</td>
+                                    <td>{{$data->user->name}}</td>
+                                    <td>{{$data->payment_method == 1 ? 'Cash' : 'Online'}}</td>
+                                    <td>Rp. {{number_format($data->total_harga)}}</td>
+                                    <td>Rp. {{number_format($data->bayar)}}</td>
+                                    <td>Rp. {{number_format($data->kembali)}}</td>
                                     <td class="d-flex">
-                                        <a href="/transaksi/{{$data->id}}/edit" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i></a>
-                                        <form action="/transaksi/{{$data->id}}" method="POST" class="mx-1">
-                                            @csrf
-                                            @method('delete')
-                                            <button onclick="return confirm('Apakah anda ingin menghapus data transaksi penerbangan ini?')" class="btn btn-danger btn-sm"><i class="bi bi-trash3"></i></button>
-                                        </form>
                                         <a href="/transaksi/{{$data->id}}" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a>
                                     </td>
                                 </tr>
